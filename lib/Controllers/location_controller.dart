@@ -9,15 +9,19 @@ class LocationController extends GetxController {
   BackgroundLocation _backgroundLocation = new BackgroundLocation();
   Timer _timer;
   bool _isTimerInitialized = false;
+  final locatusStatus = "Location service is not enabled".obs;
   final isAppInactive = false.obs;
   getCurrentLocation() {
-    _backgroundLocation.getCurrentLocation().then((location) =>
-        print('This is current Location ' + location.toMap().toString()));
+    _backgroundLocation.getCurrentLocation().then((location) => {
+          print('This is current Location ' + location.toMap().toString()),
+          locatusStatus.value = location.toMap().toString()
+        });
   }
 
   onStartLocationServiceClick() async {
     try {
       await BackgroundLocation.startLocationService();
+      locatusStatus.value = 'Location Service is starting....';
       print("Background Location Service is starting......");
       _timer = new Timer.periodic(Duration(seconds: 12), (Timer t) {
         _isTimerInitialized = true;
@@ -30,6 +34,7 @@ class LocationController extends GetxController {
 
   onStopLocationServiceClick() {
     print("Background Location Service is stopping.....");
+    locatusStatus.value = 'Location service is not enabled';
     BackgroundLocation.stopLocationService();
     if (_isTimerInitialized) {
       _timer.cancel();

@@ -59,13 +59,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         body: Center(
           child: ListView(
             children: <Widget>[
-              locationData('Latitude: ' + latitude),
-              locationData('Longitude: ' + longitude),
-              locationData('Altitude: ' + altitude),
-              locationData('Accuracy: ' + accuracy),
-              locationData('Bearing: ' + bearing),
-              locationData('Speed: ' + speed),
-              locationData('Time: ' + time),
+              Obx(()=>locationData(_locationController.locatusStatus.value)),
+             
               ElevatedButton(
                   onPressed: () {
                     _locationController.onStartLocationServiceClick();
