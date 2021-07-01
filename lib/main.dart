@@ -14,13 +14,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  String latitude = 'waiting...';
-  String longitude = 'waiting...';
-  String altitude = 'waiting...';
-  String accuracy = 'waiting...';
-  String bearing = 'waiting...';
-  String speed = 'waiting...';
-  String time = 'waiting...';
+  BackgroundLocation _backgroundLocation = new BackgroundLocation();
+  Timer _timer;
+  bool locationServiceStatus = false;
+  bool _isTimerInitialized = false;
+  int noOfClick = 0;
   LocationController _locationController = Get.put(LocationController());
   @override
   void initState() {
@@ -40,12 +38,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       _locationController.checKLocationPermission();
       _locationController.setAppActive();
     }
+    if (state == AppLifecycleState.detached) {
+      onStopLocationServiceClick();
+    }
     super.didChangeAppLifecycleState(state);
   }
 
   @override
   void dispose() {
     super.dispose();
+    print('App is closing........');
+    if (_isTimerInitialized) {
+      _timer.cancel();
+    }
+    noOfClick = 0;
+    locationServiceStatus = false;
+    BackgroundLocation.stopLocationService();
     WidgetsBinding.instance.removeObserver(this);
   }
 
@@ -59,16 +67,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         body: Center(
           child: ListView(
             children: <Widget>[
-              Obx(()=>locationData(_locationController.locatusStatus.value)),
-             
               ElevatedButton(
                   onPressed: () {
-                    _locationController.onStartLocationServiceClick();
+                    onStartLocationServiceClick();
                   },
                   child: Text('Start Location Service')),
               ElevatedButton(
                   onPressed: () {
-                    _locationController.onStopLocationServiceClick();
+                    onStopLocationServiceClick();
                   },
                   child: Text('Stop Location Service')),
             ],
@@ -87,5 +93,53 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ),
       textAlign: TextAlign.center,
     );
+  }
+
+  onStartLocationServiceClick() async {
+    try {
+      if (!locationServiceStatus) {
+        await BackgroundLocation.setAndroidNotification(
+          title: "Xplor Driver App",
+          message: "Currently fetching location",
+          icon: "@mipmap/ic_launcher",
+        );
+        noOfClick++;
+        print(noOfClick);
+        await BackgroundLocation.startLocationService();
+        if (noOfClick == 1) {
+          BackgroundLocation.stopLocationService();
+        } else {
+          print("Background Location Service is starting......");
+          setState(() {
+            locationServiceStatus = true;
+            _timer = new Timer.periodic(Duration(seconds: 12), (Timer t) {
+              _isTimerInitialized = true;
+              getCurrentLocation();
+            });
+          });
+        }
+      } else {
+        print("Background Location Service is already runinng.......");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  getCurrentLocation() {
+    _backgroundLocation.getCurrentLocation().then((location) =>
+        {print('This is current Location ' + location.toMap().toString())});
+  }
+
+  onStopLocationServiceClick() {
+    print("Background Location Service is stopping.....");
+    setState(() {
+      noOfClick = 0;
+      locationServiceStatus = false;
+      BackgroundLocation.stopLocationService();
+      if (_isTimerInitialized) {
+        _timer.cancel();
+      }
+    });
   }
 }
