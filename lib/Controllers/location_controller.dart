@@ -1,13 +1,16 @@
 import 'dart:async';
 
 import 'dart:io';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:xplor_driver_app/Controllers/gps_controller.dart';
 
 class LocationController extends GetxController {
   final isAppInactive = false.obs;
   final locationString = "No Available Data".obs;
+
+  GpsController _gpsController = new GpsController();
 
   updateLocationString(location) {
     locationString.value = location;
@@ -46,7 +49,10 @@ class LocationController extends GetxController {
                 'You have permanently denied location permission for this app, To continue please go to app setting & enable location permission');
       } else if (result == PermissionStatus.granted) {
         Get.back(closeOverlays: true);
+        _gpsController.getGpsStatus();
       }
+    } else if (status == PermissionStatus.granted) {
+      _gpsController.getGpsStatus();
     }
   }
 
@@ -61,6 +67,8 @@ class LocationController extends GetxController {
   setAppInactive() {
     isAppInactive.value = true;
   }
+
+  
 
   @override
   void onInit() {

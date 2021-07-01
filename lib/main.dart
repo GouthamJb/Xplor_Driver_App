@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:xplor_driver_app/Controllers/gps_controller.dart';
 import 'package:xplor_driver_app/Controllers/location_controller.dart';
 
 void main() => runApp(MyApp());
@@ -17,6 +18,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   BackgroundLocation _backgroundLocation = new BackgroundLocation();
+  GpsController _gpsController = new GpsController();
   Timer _timer;
   bool locationServiceStatus = false;
   bool _isTimerInitialized = false;
@@ -150,7 +152,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  getCurrentLocation() {
+  getCurrentLocation() async {
+    await _locationController.checKLocationPermission();
     _backgroundLocation.getCurrentLocation().then((location) => {
           print('This is current Location ' + location.toMap().toString()),
           _locationController.updateLocationString(location.toMap().toString())
