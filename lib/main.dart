@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:background_location/background_location.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -57,27 +59,46 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
   }
 
+  Future<bool> _onwillPopScpoe() async {
+    Get.defaultDialog(
+        textConfirm: 'Exit App',
+        onConfirm: () => exit(0),
+        onCancel: () => Get.back(closeOverlays: true),
+        title: 'Do you really want to exit?',
+        middleText: 'Exiting the application will stop fetching location');
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Background Location Service'),
-        ),
-        body: Center(
-          child: ListView(
-            children: <Widget>[
-              ElevatedButton(
-                  onPressed: () {
-                    onStartLocationServiceClick();
-                  },
-                  child: Text('Start Location Service')),
-              ElevatedButton(
-                  onPressed: () {
-                    onStopLocationServiceClick();
-                  },
-                  child: Text('Stop Location Service')),
-            ],
+      home: WillPopScope(
+        onWillPop: _onwillPopScpoe,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Background Location Service'),
+          ),
+          body: Center(
+            child: ListView(
+              children: <Widget>[
+                Obx(() =>
+                    locationData(_locationController.locationString.value)),
+                ElevatedButton(
+                    onPressed: () {
+                      onStartLocationServiceClick();
+                    },
+                    child: Text(noOfClick != 0
+                        ? locationServiceStatus
+                            ? 'Fetching Location...'
+                            : 'Start Location Service'
+                        : 'Get Ready!')),
+                ElevatedButton(
+                    onPressed: () {
+                      onStopLocationServiceClick();
+                    },
+                    child: Text('Stop Location Service')),
+              ],
+            ),
           ),
         ),
       ),
@@ -103,8 +124,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           message: "Currently fetching location",
           icon: "@mipmap/ic_launcher",
         );
-        noOfClick++;
-        print(noOfClick);
+        setState(() {
+          noOfClick++;
+          print(noOfClick);
+        });
+
         await BackgroundLocation.startLocationService();
         if (noOfClick == 1) {
           BackgroundLocation.stopLocationService();
@@ -127,8 +151,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   getCurrentLocation() {
-    _backgroundLocation.getCurrentLocation().then((location) =>
-        {print('This is current Location ' + location.toMap().toString())});
+    _backgroundLocation.getCurrentLocation().then((location) => {
+          print('This is current Location ' + location.toMap().toString()),
+          _locationController.updateLocationString(location.toMap().toString())
+        });
   }
 
   onStopLocationServiceClick() {
@@ -137,6 +163,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       noOfClick = 0;
       locationServiceStatus = false;
       BackgroundLocation.stopLocationService();
+      _locationController.updateLocationString('No Available Data');
       if (_isTimerInitialized) {
         _timer.cancel();
       }

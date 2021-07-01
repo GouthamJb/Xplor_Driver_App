@@ -7,6 +7,12 @@ import 'package:permission_handler/permission_handler.dart';
 
 class LocationController extends GetxController {
   final isAppInactive = false.obs;
+  final locationString = "No Available Data".obs;
+
+  updateLocationString(location) {
+    locationString.value = location;
+  }
+
   checKLocationPermission() async {
     var status = await Permission.location.status;
     print("status:$status");
@@ -16,6 +22,16 @@ class LocationController extends GetxController {
       print("result:$result");
       if (result == PermissionStatus.denied) {
         print("Permission is denied");
+        Get.defaultDialog(
+            onConfirm: () =>
+                getCloseDefaultDialog().then((value) => openAppSettings()),
+            barrierDismissible: false,
+            textCancel: "Exit App",
+            textConfirm: "Go to App Settings",
+            onCancel: () => exit(0),
+            title: 'Alert!',
+            middleText:
+                'You have denied location permission for this app, To continue please go to app setting & enable location permission');
       } else if (result == PermissionStatus.permanentlyDenied) {
         print("Permission is permanently denied");
         Get.defaultDialog(
@@ -28,6 +44,8 @@ class LocationController extends GetxController {
             title: 'Alert!',
             middleText:
                 'You have permanently denied location permission for this app, To continue please go to app setting & enable location permission');
+      } else if (result == PermissionStatus.granted) {
+        Get.back(closeOverlays: true);
       }
     }
   }
