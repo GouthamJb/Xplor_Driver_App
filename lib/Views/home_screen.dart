@@ -244,11 +244,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       }
                     },
                     child: Container(
-                      color: noOfClick != 0
-                          ? locationServiceStatus
-                              ? HexColor('#F7444E')
-                              : HexColor('#18AD00')
-                          : HexColor('#002C3E'),
+                      color: locationServiceStatus
+                          ? HexColor('#F7444E')
+                          : HexColor('#18AD00'),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -256,11 +254,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                noOfClick != 0
-                                    ? locationServiceStatus
-                                        ? 'Press to Deactivate'
-                                        : 'Activate Live'
-                                    : 'Get Ready!',
+                                locationServiceStatus
+                                    ? 'Press to Deactivate'
+                                    : 'Activate Live',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 17.sp),
                               ),
@@ -292,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  onStartLocationServiceClick() async {
+  Future onStartLocationServiceClick() async {
     try {
       if (!locationServiceStatus) {
         await BackgroundLocation.setAndroidNotification(
@@ -307,13 +303,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
         await BackgroundLocation.startLocationService();
         if (noOfClick == 1) {
-          BackgroundLocation.stopLocationService();
+          await BackgroundLocation.stopLocationService();
+          Get.defaultDialog(
+              barrierDismissible: false,
+              onCancel: () => onStopLocationServiceClick()
+                  .then((value) => Get.back(closeOverlays: true)),
+              onConfirm: () => onStartLocationServiceClick()
+                  .then((value) => Get.back(closeOverlays: true)),
+              title: 'Do you Really want to activate?',
+              middleText: 'The app will be fetching your live location');
         } else {
           print("Background Location Service is starting......");
           await getCurrentLocation();
           setState(() {
             locationServiceStatus = true;
-            _timer = new Timer.periodic(Duration(seconds: 12), (Timer t) {
+            _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
               _isTimerInitialized = true;
               getCurrentLocation();
             });
@@ -335,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         });
   }
 
-  onStopLocationServiceClick() {
+  Future onStopLocationServiceClick() async {
     print("Background Location Service is stopping.....");
     setState(() {
       noOfClick = 0;
