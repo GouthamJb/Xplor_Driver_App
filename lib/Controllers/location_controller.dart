@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'dart:io';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:xplor_driver_app/Controllers/gps_controller.dart';
@@ -67,8 +65,6 @@ class LocationController extends GetxController {
   setAppInactive() {
     isAppInactive.value = true;
   }
-
-  
 
   @override
   void onInit() {
