@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:xplor_driver_app/Models/models/login_model.dart';
-import 'package:xplor_driver_app/Models/models/otp_model.dart';
-import 'package:xplor_driver_app/Models/models/signup_model.dart';
-import 'package:xplor_driver_app/Views/home_screen.dart';
+import '/Models/models/login_model.dart';
+import '/Models/models/otp_model.dart';
+import '/Models/models/signup_model.dart';
+import '/Views/home_screen.dart';
 
 Color errorColor = Color(0xffE52A0E);
 

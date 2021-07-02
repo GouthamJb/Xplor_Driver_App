@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:xplor_driver_app/Configs/paths.dart';
-import 'package:xplor_driver_app/Services/cache_services.dart';
+import '/Configs/paths.dart';
+import '/Services/cache_services.dart';
 
 class OtpModal {
   String mobile, otp;

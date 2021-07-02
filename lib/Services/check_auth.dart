@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
-import 'package:xplor_driver_app/Configs/paths.dart';
-import 'package:xplor_driver_app/Services/cache_services.dart';
-import 'package:xplor_driver_app/Services/token_refresh.dart';
+import '/Configs/paths.dart';
+import '/Services/cache_services.dart';
+import '/Services/token_refresh.dart';
 
 class CheckAuth {
   CheckAuth();

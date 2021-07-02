@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:xplor_driver_app/Models/models/signup_model.dart';
-import 'package:xplor_driver_app/Views/Authentication/otp_page.dart';
+import '/Models/models/signup_model.dart';
+import 'otp_page.dart';
 
 class Agreement extends StatefulWidget {
   Agreement({Key key}) : super(key: key);

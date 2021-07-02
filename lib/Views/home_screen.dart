@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:xplor_driver_app/Controllers/location_controller.dart';
+import '../Controllers/location_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

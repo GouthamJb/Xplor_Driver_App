@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:xplor_driver_app/Models/models/login_model.dart';
-import 'package:xplor_driver_app/Views/Authentication/otp_page.dart';
-import 'package:xplor_driver_app/Views/Authentication/sign_up.dart';
+import '/Models/models/login_model.dart';
+import 'otp_page.dart';
+import 'sign_up.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key key}) : super(key: key);
@@ -16,7 +16,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final _phoneFieldController = TextEditingController();
-   String _mobile;
+  String _mobile;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

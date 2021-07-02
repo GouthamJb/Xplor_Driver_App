@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:xplor_driver_app/Services/cache_services.dart';
-import 'package:xplor_driver_app/Views/home_screen.dart';
+import 'Services/cache_services.dart';
+import 'Views/home_screen.dart';
 import 'Views/Authentication/get_started.dart';
 
 void main() async {

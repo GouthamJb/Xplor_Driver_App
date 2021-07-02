@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:xplor_driver_app/Views/Authentication/sign_in.dart';
+import 'sign_in.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({Key key}) : super(key: key);

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:xplor_driver_app/Configs/paths.dart';
+import '/Configs/paths.dart';
 
 class LoginModal {
   String mobile;
