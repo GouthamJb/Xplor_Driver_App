@@ -25,6 +25,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(375, 667),

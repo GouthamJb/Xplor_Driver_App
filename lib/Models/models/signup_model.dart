@@ -12,7 +12,7 @@ class SignUpModal {
   Future<bool> signUpUser() async {
     try {
       Response res = await post(Uri.parse(url),
-          body: {"username": "RI_" + mobile, "first_name": name});
+          body: {"username": "DR_" + mobile, "first_name": name});
 
       print(res.statusCode);
       print(res.body.runtimeType);

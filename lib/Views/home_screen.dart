@@ -130,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           BackgroundLocation.stopLocationService();
         } else {
           print("Background Location Service is starting......");
+          await getCurrentLocation();
           setState(() {
             locationServiceStatus = true;
             _timer = new Timer.periodic(Duration(seconds: 12), (Timer t) {

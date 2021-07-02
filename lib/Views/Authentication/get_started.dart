@@ -1,10 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:xplor_driver_app/Controllers/location_controller.dart';
 import 'sign_in.dart';
 
-class GetStarted extends StatelessWidget {
+class GetStarted extends StatefulWidget {
   const GetStarted({Key key}) : super(key: key);
+
+  @override
+  _GetStartedState createState() => _GetStartedState();
+}
+
+class _GetStartedState extends State<GetStarted> with WidgetsBindingObserver {
+  LocationController _locationController = new LocationController();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  //when page is detached or resumed
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+    if (state == AppLifecycleState.paused) {
+      _locationController.setAppInactive();
+    }
+    if ((_locationController.isAppInactive.value) &&
+        (state == AppLifecycleState.resumed)) {
+      print("From Background");
+      _locationController.checKLocationPermission();
+      _locationController.setAppActive();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  //when pages is disposed
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   @override
   Widget build(BuildContext context) {

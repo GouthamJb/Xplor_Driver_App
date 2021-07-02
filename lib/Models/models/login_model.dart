@@ -12,7 +12,7 @@ class LoginModal {
   Future<bool> loginUser() async {
     try {
       Response res =
-          await post(Uri.parse(url), body: {"username": "RI_" + mobile});
+          await post(Uri.parse(url), body: {"username": "DR_" + mobile});
 
       print(res.statusCode);
       print(res.body.runtimeType);

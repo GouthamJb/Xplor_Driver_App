@@ -14,7 +14,7 @@ class OtpModal {
   Future<bool> sendOtp() async {
     try {
       Response res = await post(Uri.parse(url),
-          body: {"username": "RI_" + mobile, "password": otp});
+          body: {"username": "DR_" + mobile, "password": otp});
 
       print(res.statusCode);
       print(res.body);
