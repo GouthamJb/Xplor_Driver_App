@@ -36,6 +36,8 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.6
   flutter_screenutil: ^5.0.0+2
+  hexcolor: ^2.0.4
+  google_maps_flutter: ^2.0.6
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +58,7 @@ flutter:
   assets:
     - assets/backgrounds/
     - assets/icons/
+    - assets/json_assets/
 
   fonts:
     - family: OpenSans

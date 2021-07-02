@@ -15,6 +15,7 @@ class _GetStartedState extends State<GetStarted> with WidgetsBindingObserver {
   LocationController _locationController = new LocationController();
   @override
   void initState() {
+    _locationController.checKLocationPermission();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
