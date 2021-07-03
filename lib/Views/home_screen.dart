@@ -81,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     } else {
       Get.defaultDialog(
           textConfirm: 'Minimize App',
-          onConfirm: () => MoveToBackground.moveTaskToBack()
-              .then((value) => Get.back(closeOverlays: true)),
+          onConfirm: () => onActivateTrackConfirm()
+              .then((value) => MoveToBackground.moveTaskToBack()),
           onCancel: () => Get.back(closeOverlays: true),
           title: 'Alert!',
           middleText:
