@@ -330,13 +330,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               middleText: 'The app will be fetching your live location');
         } else {
           print("Background Location Service is starting......");
-          await _locationController.checKLocationPermission();
+          await _locationController.checKLocationPermission(
+              isCurrentRunning: true);
           setState(() {
             locationServiceStatus = true;
-            _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
+            StartTimer();
+            /*    _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
               _isTimerInitialized = true;
               getCurrentLocation();
-            });
+            }); */
           });
         }
       } else {
@@ -349,6 +351,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Future getCurrentLocation() async {
     //await _locationController.checKLocationPermission();
+    var serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      if (_isTimerInitialized) {
+        _timer.cancel();
+      }
+      serviceEnabled = await _location.requestService();
+      if (serviceEnabled) {
+        StartTimer();
+      } else {
+        onStopLocationServiceClick();
+      }
+    }
     _backgroundLocation.getCurrentLocation().then((location) => {
           print('This is current Location ' + location.toMap().toString()),
           _locationController.updateLocationString(location.toMap().toString())
@@ -370,5 +384,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   Future onActivateTrackConfirm() async {
     Get.back(closeOverlays: true);
+  }
+
+  StartTimer() {
+    _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
+      _isTimerInitialized = true;
+      getCurrentLocation();
+    });
   }
 }
