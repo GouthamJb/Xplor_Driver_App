@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:location/location.dart' as loc;
 import '../Controllers/location_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -24,6 +24,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   LocationController _locationController = Get.put(LocationController());
   GoogleMapController _controller;
   String _mapStyle;
+  bool serviceEnabled = false;
+  bool isRunning = false;
+  loc.Location _location = new loc.Location();
+  BackgroundLocation _backgroundLocation = new BackgroundLocation();
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(8.4845, 76.9477),
     zoom: 14,
@@ -326,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               middleText: 'The app will be fetching your live location');
         } else {
           print("Background Location Service is starting......");
-          await getCurrentLocation();
+          await _locationController.checKLocationPermission();
           setState(() {
             locationServiceStatus = true;
             _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
@@ -343,15 +347,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  getCurrentLocation() async {
-    await _locationController.checKLocationPermission(isCurrentRunning: true);
-    var _locationData = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(_locationData);
-    //_backgroundLocation.getCurrentLocation().then((location) => {
-    // print('This is current Location ' + location.toMap().toString()),
-    //  _locationController.updateLocationString(location.toMap().toString())
-    // });
+  Future getCurrentLocation() async {
+    //await _locationController.checKLocationPermission();
+    _backgroundLocation.getCurrentLocation().then((location) => {
+          print('This is current Location ' + location.toMap().toString()),
+          _locationController.updateLocationString(location.toMap().toString())
+        });
   }
 
   Future onStopLocationServiceClick() async {
