@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:background_location/background_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -15,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  BackgroundLocation _backgroundLocation = new BackgroundLocation();
   Timer _timer;
   bool locationServiceStatus = false;
   bool _isTimerInitialized = false;
@@ -333,10 +333,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   getCurrentLocation() async {
     await _locationController.checKLocationPermission();
-    _backgroundLocation.getCurrentLocation().then((location) => {
-          print('This is current Location ' + location.toMap().toString()),
-          _locationController.updateLocationString(location.toMap().toString())
-        });
+    var _locationData = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(_locationData);
+    //_backgroundLocation.getCurrentLocation().then((location) => {
+    // print('This is current Location ' + location.toMap().toString()),
+    //  _locationController.updateLocationString(location.toMap().toString())
+    // });
   }
 
   Future onStopLocationServiceClick() async {
