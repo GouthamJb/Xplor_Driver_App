@@ -308,8 +308,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               barrierDismissible: false,
               onCancel: () => onStopLocationServiceClick()
                   .then((value) => Get.back(closeOverlays: true)),
-              onConfirm: () => onStartLocationServiceClick()
-                  .then((value) => Get.back(closeOverlays: true)),
+              onConfirm: () => onActivateTrackConfirm()
+                  .then((value) => onStartLocationServiceClick()),
               title: 'Do you Really want to activate?',
               middleText: 'The app will be fetching your live location');
         } else {
@@ -332,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   getCurrentLocation() async {
-    await _locationController.checKLocationPermission();
+    await _locationController.checKLocationPermission(isCurrentRunning: true);
     var _locationData = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     print(_locationData);
@@ -353,5 +353,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         _timer.cancel();
       }
     });
+  }
+
+  Future onActivateTrackConfirm() async {
+    Get.back(closeOverlays: true);
   }
 }
