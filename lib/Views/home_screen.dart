@@ -334,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               isCurrentRunning: true);
           setState(() {
             locationServiceStatus = true;
-            StartTimer();
+            startTimer();
             /*    _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
               _isTimerInitialized = true;
               getCurrentLocation();
@@ -358,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       }
       serviceEnabled = await _location.requestService();
       if (serviceEnabled) {
-        StartTimer();
+        startTimer();
       } else {
         onStopLocationServiceClick();
       }
@@ -386,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     Get.back(closeOverlays: true);
   }
 
-  StartTimer() {
+  startTimer() {
     _timer = new Timer.periodic(Duration(seconds: 5), (Timer t) {
       _isTimerInitialized = true;
       getCurrentLocation();

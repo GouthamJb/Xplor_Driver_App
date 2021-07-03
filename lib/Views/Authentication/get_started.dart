@@ -51,7 +51,7 @@ class _GetStartedState extends State<GetStarted> with WidgetsBindingObserver {
         height: Get.height,
         width: Get.width,
         child: Image.asset(
-          'assets/backgrounds/get_started_bg.png',
+          'assets/backgrounds/get_started_bg.jpeg',
           fit: BoxFit.cover,
         ),
       ),
