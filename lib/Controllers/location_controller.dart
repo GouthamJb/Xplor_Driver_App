@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:xplor_driver_app/Controllers/gps_controller.dart';
+import '/Controllers/gps_controller.dart';
 
 class LocationController extends GetxController {
   final isAppInactive = false.obs;
   final locationString = "No Available Data".obs;
-
+ 
   GpsController _gpsController = new GpsController();
 
   updateLocationString(location) {
