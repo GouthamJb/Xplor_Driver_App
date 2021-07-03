@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import '../Controllers/location_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -70,12 +71,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<bool> _onwillPopScpoe() async {
-    Get.defaultDialog(
-        textConfirm: 'Exit App',
-        onConfirm: () => exit(0),
-        onCancel: () => Get.back(closeOverlays: true),
-        title: 'Do you really want to exit?',
-        middleText: 'Exiting the application will stop fetching location');
+    if (!locationServiceStatus) {
+      Get.defaultDialog(
+          textConfirm: 'Exit App',
+          onConfirm: () => exit(0),
+          onCancel: () => Get.back(closeOverlays: true),
+          title: 'Do you really want to exit?',
+          middleText: 'Exiting the application will stop fetching location');
+    } else {
+      Get.defaultDialog(
+          textConfirm: 'Minimize App',
+          onConfirm: () => MoveToBackground.moveTaskToBack()
+              .then((value) => Get.back(closeOverlays: true)),
+          onCancel: () => Get.back(closeOverlays: true),
+          title: 'Alert!',
+          middleText:
+              'You can only exit app after deactivating location service.');
+    }
     return false;
   }
 
