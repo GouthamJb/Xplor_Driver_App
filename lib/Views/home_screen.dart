@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              'Please ensure that the you have activated the ',
+                              'Please ensure that you have activated the ',
                               style: TextStyle(
                                   fontSize: 9.sp, color: HexColor('#1F1F1F')),
                             ),
