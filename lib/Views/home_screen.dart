@@ -362,11 +362,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       } else {
         onStopLocationServiceClick();
       }
+    } else {
+      _backgroundLocation.getCurrentLocation().then((location) => {
+            print('This is current Location ' + location.toMap().toString()),
+            _locationController.updateGpsDetailToRemote(location.latitude,location.longitude,context)
+          });
     }
-    _backgroundLocation.getCurrentLocation().then((location) => {
-          print('This is current Location ' + location.toMap().toString()),
-          _locationController.updateLocationString(location.toMap().toString())
-        });
   }
 
   Future onStopLocationServiceClick() async {

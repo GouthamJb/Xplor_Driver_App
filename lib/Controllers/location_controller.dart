@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:xplor_driver_app/Models/models/gps_model.dart';
+import 'package:xplor_driver_app/Services/ApiServices/post_gps_service.dart';
+import 'package:xplor_driver_app/Widgets/session_expired_message.dart';
 import '/Controllers/gps_controller.dart';
 
 class LocationController extends GetxController {
@@ -9,6 +12,8 @@ class LocationController extends GetxController {
   final locationString = "No Available Data".obs;
 
   GpsController _gpsController = new GpsController();
+
+  GpsService _gpsService = new GpsService();
 
   updateLocationString(location) {
     locationString.value = location;
@@ -52,9 +57,9 @@ class LocationController extends GetxController {
         }
       }
     } else if (status == PermissionStatus.granted) {
-       if (!isCurrentRunning) {
-          _gpsController.getGpsStatus();
-        }
+      if (!isCurrentRunning) {
+        _gpsController.getGpsStatus();
+      }
     }
   }
 
@@ -68,6 +73,28 @@ class LocationController extends GetxController {
 
   setAppInactive() {
     isAppInactive.value = true;
+  }
+
+  updateGpsDetailToRemote(lat, long, context) async {
+    Map body = {
+      "vehicle_id": 3,
+      "vehicle_latitude": lat,
+      "vehicle_longitude": long,
+      "is_active": true
+    };
+    GpsPost jsonResponse = await _gpsService.fetchFromRemote(body);
+    if (jsonResponse.details.message == 'Token has Expired' ||
+        jsonResponse.details.message == 'Token Invalid') {
+      LoginErroMessage.showMyDialog(context);
+      // Get.offAll(() => SignInScreen(),transition: Transition.rightToLeft);
+    } else if (jsonResponse.details.message == 'Something went wrong!') {
+      print("Something went wrong");
+      Get.snackbar('Sorry', 'Something went wrong',
+          duration: Duration(seconds: 5));
+    } else if (jsonResponse.details.message ==
+        'GPS value has been successfully updated!') {
+      print(jsonResponse.details.message);
+    }
   }
 
   @override
